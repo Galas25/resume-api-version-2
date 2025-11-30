@@ -10,8 +10,10 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
         public void addCorsMappings(CorsRegistry registry) {
             registry.addMapping("/api/**")
                     .allowedOrigins(
+                            "http://localhost:8080",
+                            "http://localhost:3306",
                             "http://localhost:3000",
-                            "https://your-vercel-domain.vercel.app"
+                            "https://resume-generator-next-app.vercel.app/"
                     )
                     .allowedMethods("GET", "POST", "PUT", "DELETE")
                     .allowedHeaders("*")
