@@ -13,7 +13,7 @@ public class ResumeModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false, updatable = false)
-    private Long ResumeID;
+    private Long resumeId;
 
     @Column(nullable = false, updatable = false)
     private String firstName;
