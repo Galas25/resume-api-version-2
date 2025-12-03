@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("api")
 public class ResumeController {
 
     private final ResumeService resumeService;
@@ -29,22 +29,24 @@ public class ResumeController {
     @GetMapping("/resumes")
     public ResponseEntity<List<ResumeModel>> getAllResumes() {
         List<ResumeModel> resumes = resumeService.getAllResumes();
-        return new ResponseEntity<>(resumes, HttpStatus.OK);
+        return ResponseEntity.ok(resumeService.getAllResumes());
     }
 
-    @PutMapping("/resumes/{id}")
-    public ResponseEntity<ResumeModel> updateResumebyID(@PathVariable("id") Long resumeId, @RequestBody CreateResumeRequest request) {
+    @PutMapping("/resumes/{resumeId}")
+    public ResponseEntity<ResumeModel> updateResumebyID(@PathVariable("resumeId") Long resumeId, @RequestBody CreateResumeRequest request) {
         ResumeModel updateResume = resumeService.updateResumebyID(resumeId, request);
         return ResponseEntity.ok(updateResume);
     }
 
-    @DeleteMapping("/resumes/{id}")
-    public ResponseEntity<ResumeModel> deleteResume(@RequestBody CreateResumeRequest request) {
-        return null;
+    @DeleteMapping("/resumes/{resumeId}")
+    public ResponseEntity<Void> deleteResume(@PathVariable Long resumeId) {
+        resumeService.deleteResume(resumeId);
+        return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/resumes")
-    public ResponseEntity<ResumeModel> deleteAllResumes() {
-        return null;
+    public ResponseEntity<Void> deleteAllResumes() {
+        resumeService.deleteAllResumes();
+        return ResponseEntity.noContent().build();
     }
 }

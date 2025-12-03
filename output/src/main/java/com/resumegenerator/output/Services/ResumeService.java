@@ -19,6 +19,10 @@ public class ResumeService {
     public ResumeModel createResume(CreateResumeRequest request) {
         ResumeModel resume = ResumeModel.builder()
                 .resumeId(request.getResumeId())
+                .firstName(request.getFirstName())
+                .lastName(request.getLastName())
+                .phone(request.getPhone())
+                .email(request.getEmail())
                 .build();
         resumeRepository.save(resume);
         return resume;
@@ -31,16 +35,24 @@ public class ResumeService {
     @Transactional
     public ResumeModel updateResumebyID(Long resumeId, CreateResumeRequest request) {
         ResumeModel existingResume = resumeRepository.findById(resumeId).orElseThrow(() -> new RuntimeException("Resume not found: " + resumeId));
-        return updateResumebyID(resumeId, request);
+
+        existingResume.setFirstName(request.getFirstName());
+        existingResume.setLastName(request.getLastName());
+        existingResume.setPhone(request.getPhone());
+        existingResume.setEmail(request.getEmail());
+
+        return resumeRepository.save(existingResume);
+     }
+     @Transactional
+    public void deleteResume(Long resumeId) {
+        if (!resumeRepository.existsById(resumeId)) {
+            throw new RuntimeException("Resume not found: " + resumeId);
+        }
+        resumeRepository.deleteById(resumeId);
      }
 
-    public List<ResumeModel> deleteAllResumes() {
+     @Transactional
+     public void deleteAllResumes() {
         resumeRepository.deleteAll();
-        return resumeRepository.findAll();
-    }
-
-    public List<ResumeModel> deleteResume(ResumeModel resume) {
-        resumeRepository.delete(resume);
-        return resumeRepository.findAll();
-    }
+     }
 }

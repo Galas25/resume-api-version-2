@@ -12,19 +12,19 @@ import java.time.LocalDateTime;
 public class ResumeModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(nullable = false, updatable = false)
+    @Column(name ="resumeId", nullable = false, updatable = false)
     private Long resumeId;
 
-    @Column(nullable = false, updatable = false)
+    @Column(name = "firstName", nullable = false, updatable = true)
     private String firstName;
 
-    @Column(nullable = false, updatable = false)
+    @Column(name = "lastName", nullable = false, updatable = true)
     private String lastName;
 
-    @Column(nullable = false, updatable = false)
+    @Column(name= "email", nullable = false, updatable = true)
     private String email;
 
-    @Column(nullable = false, updatable = false)
+    @Column(name = "phone", nullable = false, updatable = true)
     private String phone;
 
 
