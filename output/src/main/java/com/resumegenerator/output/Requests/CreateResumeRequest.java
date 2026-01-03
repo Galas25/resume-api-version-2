@@ -1,5 +1,6 @@
 package com.resumegenerator.output.Requests;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,9 +10,18 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 
 public class CreateResumeRequest {
-    private Long resumeId;
+    @NotBlank
     private String firstName;
+
+    private String middleName;
+
+    @NotBlank
     private String lastName;
+
     private String email;
+
+    @NotBlank
     private String phone;
+    @NotBlank
+    private String address;
 }

@@ -1,11 +1,5 @@
 package com.resumegenerator.output.Models;
-import com.resumegenerator.output.Models.address;
-import com.resumegenerator.output.Models.Name;
-import com.resumegenerator.output.Models.email;
-import com.resumegenerator.output.Models.contactNumber;
-import com.resumegenerator.output.Models.workExperience;
-import com.resumegenerator.output.Models.education;
-import com.resumegenerator.output.Models.skills;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDateTime;
@@ -19,20 +13,11 @@ import java.time.LocalDateTime;
 public class Resume {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name ="resumeId", nullable = false, updatable = false)
     private Long resumeId;
 
-    @Column(name = "firstName", nullable = false, updatable = true)
-    private String firstName;
-
-    @Column(name = "lastName", nullable = false, updatable = true)
-    private String lastName;
-
-    @Column(name= "email", nullable = false, updatable = true)
-    private String email;
-
-    @Column(name = "phone", nullable = false, updatable = true)
-    private String phone;
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "resume", optional = true)
+    @JsonManagedReference
+    private PersonalInformation PersonalInformation;
 
     private LocalDateTime createdAt;
     @PrePersist
