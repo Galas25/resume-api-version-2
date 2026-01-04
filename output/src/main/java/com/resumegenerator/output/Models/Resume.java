@@ -19,6 +19,14 @@ public class Resume {
     @JsonManagedReference
     private PersonalInformation PersonalInformation;
 
+    @OneToOne(cascade =  CascadeType.ALL, mappedBy = "resume", optional = true)
+    @JsonManagedReference
+    private Education education;
+
+    @OneToOne(cascade =  CascadeType.ALL, mappedBy = "resume", optional = true)
+    @JsonManagedReference
+    private Skills skills;
+
     private LocalDateTime createdAt;
     @PrePersist
     public void onCreate() {

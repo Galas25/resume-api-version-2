@@ -24,4 +24,10 @@ public class CreateResumeRequest {
     private String phone;
     @NotBlank
     private String address;
+
+    private String skills;
+
+    private String institution;
+
+    private String completionDate;
 }
