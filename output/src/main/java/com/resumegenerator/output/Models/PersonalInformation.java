@@ -25,10 +25,10 @@ public class PersonalInformation {
     @Column(nullable = false)
     private String firstName;
 
+    private String middleName;
+
     @Column(nullable = false)
     private String lastName;
-
-    private String middleName;
 
     @Column(nullable = true)
     private String email;

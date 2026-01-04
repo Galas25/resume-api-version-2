@@ -13,15 +13,7 @@ import java.time.LocalDateTime;
 public class Resume {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-<<<<<<< HEAD
     private Long resumeId;
-=======
-    private Long resume_id;
-
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "personalInformation_id", referencedColumnName = "id")
-    private personalInformation personalInformation;
->>>>>>> 187d47f3e63fe144367f8859f9daf553683ab8ab
 
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "resume", optional = true)
     @JsonManagedReference
@@ -41,5 +33,5 @@ public class Resume {
         this.createdAt = LocalDateTime.now();
     }
 
-    //One-to-many model connection: (MUST) @OneToMany
+    //One to many java connection: (MUST)
 }

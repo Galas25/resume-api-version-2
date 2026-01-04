@@ -6,24 +6,26 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@AllArgsConstructor
-@NoArgsConstructor
 @Data
 @Entity
+@AllArgsConstructor
+@NoArgsConstructor
 
 public class Education {
-    @Id
-    private Long id;
-
     @OneToOne
     @MapsId
     @JoinColumn(name = "id")
     @JsonBackReference
     private Resume resume;
 
-    @Column(nullable = false)
+    @Id
+    private Long id;
+
     private String institution;
 
-    @Column(nullable = true)
+    @Column (nullable = true)
     private String completionDate;
+
+
+
 }

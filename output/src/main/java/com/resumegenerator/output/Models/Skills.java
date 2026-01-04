@@ -6,11 +6,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
 @Entity
-
 public class Skills {
     @Id
     private Long id;
@@ -21,6 +20,6 @@ public class Skills {
     @JsonBackReference
     private Resume resume;
 
-    @Column(nullable = false)
     private String skills;
+
 }
