@@ -10,12 +10,13 @@ import java.time.LocalDateTime;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+
 public class Resume {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long resumeId;
 
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "resume", optional = true)
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "resume")
     @JsonManagedReference
     private PersonalInformation PersonalInformation;
 
@@ -35,13 +36,9 @@ public class Resume {
     @JsonManagedReference
     private Experience experience;
 
-
-
     private LocalDateTime createdAt;
     @PrePersist
     public void onCreate() {
         this.createdAt = LocalDateTime.now();
     }
-
-    //One to many java connection: (MUST)
 }

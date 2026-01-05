@@ -18,6 +18,7 @@ public class CreateResumeRequest {
 
     @NotBlank
     private String lastName;
+
     private String suffix;
     private String email;
 

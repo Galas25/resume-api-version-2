@@ -1,5 +1,6 @@
 package com.resumegenerator.output.Services;
 
+import com.resumegenerator.output.DTOs.ResumePdfDto;
 import com.resumegenerator.output.Models.*;
 import com.resumegenerator.output.Repositories.ResumeRepository;
 import com.resumegenerator.output.Requests.CreateResumeRequest;
@@ -35,18 +36,6 @@ public class ResumeService {
     @Transactional
     public Resume createResume(CreateResumeRequest request) {
         Resume resume = new Resume();
-
-        // Personal Information
-        PersonalInformation pi = new PersonalInformation();
-        pi.setFirstName(request.getFirstName());
-        pi.setMiddleName(request.getMiddleName());
-        pi.setLastName(request.getLastName());
-        pi.setSuffix(request.getSuffix());
-        pi.setEmail(request.getEmail());
-        pi.setPhone(request.getPhone());
-        pi.setAddress(request.getAddress());
-        pi.setResume(resume);
-        resume.setPersonalInformation(pi);
 
         // Professional Summary
         ProfessionalSummary ps = new ProfessionalSummary();
@@ -151,27 +140,30 @@ public class ResumeService {
 
     // ---------------- PDF Generation ----------------
 
-    public byte[] generateResumePdf(Resume resume) {
+    public byte[] generateResumePdf(ResumePdfDto resume) {
         try (ByteArrayOutputStream out = new ByteArrayOutputStream()) {
             Document document = new Document(PageSize.A4, 40, 40, 40, 40);
             PdfWriter.getInstance(document, out);
             document.open();
 
-            PersonalInformation info = resume.getPersonalInformation();
-
             // --- Personal Info ---
-            addHeader(document, info);
-            addEmptyLine(document, 1);
+            if (resume.getPersonalInformation() != null) {
+                PersonalInformation pi = resume.getPersonalInformation();
+                document.add(new Paragraph("\n"));
+                addHeader(document, pi);
+                addEmptyLine(document, 1);
+            }
+
 
             // --- Professional Summary ---
-            if (resume.getProfessionalSummary() != null && resume.getProfessionalSummary().getSummary() != null) {
+            if (resume.getProfessionalSummary() != null) {
                 addSectionTitle(document, "PROFESSIONAL SUMMARY");
                 document.add(new Paragraph(resume.getProfessionalSummary().getSummary(), BODY_FONT));
                 addEmptyLine(document, 1);
             }
 
             // --- Experience ---
-            if (resume.getExperience() != null && resume.getExperience().getExperience() != null) {
+            if (resume.getExperience() != null) {
                 addSectionTitle(document, "EXPERIENCE");
                 document.add(new Paragraph(resume.getExperience().getExperience(), BODY_FONT));
                 addEmptyLine(document, 1);
@@ -190,7 +182,7 @@ public class ResumeService {
             }
 
             // --- Skills ---
-            if (resume.getSkills() != null && resume.getSkills().getSkills() != null) {
+            if (resume.getSkills() != null) {
                 addSectionTitle(document, "SKILLS");
                 document.add(new Paragraph(resume.getSkills().getSkills(), BODY_FONT));
                 addEmptyLine(document, 1);
@@ -199,7 +191,6 @@ public class ResumeService {
             document.close();
             return out.toByteArray();
         } catch (Exception e) {
-            e.printStackTrace();
             return null;
         }
     }
@@ -212,7 +203,7 @@ public class ResumeService {
         String fullName = info.getFirstName() + " " +
                 (info.getMiddleName() != null ? info.getMiddleName() + " " : "") +
                 info.getLastName() +
-                (info.getSuffix() != null ? ", " + info.getSuffix() : "");
+                (info.getSuffix() != null ? " " + info.getSuffix() : "");
 
         Paragraph name = new Paragraph(fullName.toUpperCase(), TITLE_FONT);
         name.setAlignment(Element.ALIGN_CENTER);

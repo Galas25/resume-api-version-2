@@ -1,5 +1,6 @@
 package com.resumegenerator.output.Controllers;
 
+import com.resumegenerator.output.DTOs.ResumePdfDto;
 import com.resumegenerator.output.Models.Resume;
 import com.resumegenerator.output.Requests.CreateResumeRequest;
 import com.resumegenerator.output.Services.ResumeService;
@@ -22,6 +23,7 @@ public class ResumeController {
 
     // ---------------- CRUD Endpoints ----------------
 
+    //Create
     @PostMapping("/resumes")
     public ResponseEntity<Resume> createResume(@RequestBody CreateResumeRequest request) {
         Resume resume = resumeService.createResume(request);
@@ -39,12 +41,14 @@ public class ResumeController {
         return ResponseEntity.ok(updated);
     }
 
+    //Delete by ID
     @DeleteMapping("/resumes/{resumeId}")
     public ResponseEntity<Void> deleteResume(@PathVariable Long resumeId) {
         resumeService.deleteResume(resumeId);
         return ResponseEntity.noContent().build();
     }
 
+    //Delete ALL
     @DeleteMapping("/resumes")
     public ResponseEntity<Void> deleteAllResumes() {
         resumeService.deleteAllResumes();
@@ -53,15 +57,18 @@ public class ResumeController {
 
     // ---------------- PDF Generation ----------------
 
-    @PostMapping(value = "/resumes/generate", produces = MediaType.APPLICATION_PDF_VALUE)
-    public ResponseEntity<byte[]> generateResumePdf(@RequestBody Resume resume) throws Exception {
-        // Pass the full resume object to the service
-        byte[] pdfBytes = resumeService.generateResumePdf(resume);
+    @PostMapping("/resumes/generate")
+    public ResponseEntity<byte[]> generateResumePdf(@RequestBody ResumePdfDto dto) {
+        try {
+            byte[] pdfBytes = resumeService.generateResumePdf(dto);
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_PDF);
-        headers.setContentDisposition(ContentDisposition.builder("inline").filename("resume.pdf").build());
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_PDF);
+            headers.setContentDisposition(ContentDisposition.builder("inline").filename("resume.pdf").build());
 
-        return new ResponseEntity<>(pdfBytes, headers, HttpStatus.OK);
+            return new ResponseEntity<>(pdfBytes, headers, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }

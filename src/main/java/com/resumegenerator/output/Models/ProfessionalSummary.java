@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
+
 public class ProfessionalSummary {
     @Id
     private Long id;
