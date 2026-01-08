@@ -140,15 +140,68 @@ public class ResumeService {
 
     // ---------------- PDF Generation ----------------
 
-    public byte[] generateResumePdf(ResumePdfDto resume) {
+    public byte[] generateResumePdf(ResumePdfDto dto) {
+        System.out.println("DEBUG: Starting PDF Generation and save for DTO" + dto);
+
+        Resume resumeEntity = new Resume();
+
+        if (dto.getPersonalInformation() != null) {
+            PersonalInformation pi = new PersonalInformation();
+            pi.setFirstName(dto.getPersonalInformation().getFirstName());
+            pi.setMiddleName(dto.getPersonalInformation().getMiddleName());
+            pi.setLastName(dto.getPersonalInformation().getLastName());
+            pi.setSuffix(dto.getPersonalInformation().getSuffix());
+            pi.setEmail(dto.getPersonalInformation().getEmail());
+            pi.setPhone(dto.getPersonalInformation().getPhone());
+            pi.setAddress(dto.getPersonalInformation().getAddress());
+            pi.setResume(resumeEntity);
+            resumeEntity.setPersonalInformation(pi);
+        }
+        if (dto.getSkills() != null) {
+            Skills skills = new Skills();
+            skills.setSkills(dto.getSkills().getSkills());
+            skills.setResume(resumeEntity);
+            resumeEntity.setSkills(skills);
+        }
+        if (dto.getEducation() != null) {
+            Education edu = new Education();
+            edu.setInstitution(dto.getEducation().getInstitution());
+            edu.setCompletionDate(dto.getEducation().getCompletionDate());
+            edu.setResume(resumeEntity);
+            resumeEntity.setEducation(edu);
+        }
+        if (dto.getProfessionalSummary() != null) {
+            ProfessionalSummary prof = new ProfessionalSummary();
+            prof.setSummary(dto.getProfessionalSummary().getSummary());
+            prof.setResume(resumeEntity);
+            resumeEntity.setProfessionalSummary(prof);
+        }
+        if (dto.getExperience() != null) {
+            Experience exp = new Experience();
+            exp.setExperience(dto.getExperience().getExperience());
+            exp.setResume(resumeEntity);
+            resumeEntity.setExperience(exp);
+        }
+
+        try {
+            System.out.println("DEBUG: Saving resume to database");
+            resumeRepository.save(resumeEntity);
+            System.out.println("DEBUG: Resume saved with ID: " + resumeEntity.getResumeId());
+        } catch (Exception e) {
+            System.err.println("DEBUG: Resume not saved with ID: " + resumeEntity.getResumeId());
+            e.printStackTrace();
+            throw new RuntimeException("Database save failed :(" , e);
+        }
+
+        System.out.println("DEBUG: Generating the damn PDF");
         try (ByteArrayOutputStream out = new ByteArrayOutputStream()) {
             Document document = new Document(PageSize.A4, 40, 40, 40, 40);
             PdfWriter.getInstance(document, out);
             document.open();
 
             // --- Personal Info ---
-            if (resume.getPersonalInformation() != null) {
-                PersonalInformation pi = resume.getPersonalInformation();
+            if (dto.getPersonalInformation() != null) {
+                PersonalInformation pi = dto.getPersonalInformation();
                 document.add(new Paragraph("\n"));
                 addHeader(document, pi);
                 addEmptyLine(document, 1);
@@ -156,35 +209,35 @@ public class ResumeService {
 
 
             // --- Professional Summary ---
-            if (resume.getProfessionalSummary() != null) {
+            if (dto.getProfessionalSummary() != null) {
                 addSectionTitle(document, "PROFESSIONAL SUMMARY");
-                document.add(new Paragraph(resume.getProfessionalSummary().getSummary(), BODY_FONT));
+                document.add(new Paragraph(dto.getProfessionalSummary().getSummary(), BODY_FONT));
                 addEmptyLine(document, 1);
             }
 
             // --- Experience ---
-            if (resume.getExperience() != null) {
+            if (dto.getExperience() != null) {
                 addSectionTitle(document, "EXPERIENCE");
-                document.add(new Paragraph(resume.getExperience().getExperience(), BODY_FONT));
+                document.add(new Paragraph(dto.getExperience().getExperience(), BODY_FONT));
                 addEmptyLine(document, 1);
             }
 
             // --- Education ---
-            if (resume.getEducation() != null) {
+            if (dto.getEducation() != null) {
                 addSectionTitle(document, "EDUCATION");
                 PdfPTable table = new PdfPTable(2);
                 table.setWidthPercentage(100);
                 table.setWidths(new float[]{1, 3});
-                addEducationRow(table, "Institution", resume.getEducation().getInstitution());
-                addEducationRow(table, "Completion Date", resume.getEducation().getCompletionDate());
+                addEducationRow(table, "Institution", dto.getEducation().getInstitution());
+                addEducationRow(table, "Completion Date", dto.getEducation().getCompletionDate());
                 document.add(table);
                 addEmptyLine(document, 1);
             }
 
             // --- Skills ---
-            if (resume.getSkills() != null) {
+            if (dto.getSkills() != null) {
                 addSectionTitle(document, "SKILLS");
-                document.add(new Paragraph(resume.getSkills().getSkills(), BODY_FONT));
+                document.add(new Paragraph(dto.getSkills().getSkills(), BODY_FONT));
                 addEmptyLine(document, 1);
             }
 
