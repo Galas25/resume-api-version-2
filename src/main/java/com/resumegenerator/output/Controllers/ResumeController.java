@@ -22,6 +22,7 @@ public class ResumeController {
 
     // ---------------- CRUD Endpoints ----------------
 
+    //Create
     @PostMapping("/resumes")
     public ResponseEntity<Resume> createResume(@RequestBody CreateResumeRequest request) {
         Resume resume = resumeService.createResume(request);
@@ -39,12 +40,14 @@ public class ResumeController {
         return ResponseEntity.ok(updated);
     }
 
+    //Delete by ID
     @DeleteMapping("/resumes/{resumeId}")
     public ResponseEntity<Void> deleteResume(@PathVariable Long resumeId) {
         resumeService.deleteResume(resumeId);
         return ResponseEntity.noContent().build();
     }
 
+    //Delete ALL
     @DeleteMapping("/resumes")
     public ResponseEntity<Void> deleteAllResumes() {
         resumeService.deleteAllResumes();
