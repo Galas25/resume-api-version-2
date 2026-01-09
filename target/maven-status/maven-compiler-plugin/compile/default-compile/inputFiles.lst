@@ -1,6 +1,6 @@
 E:\Document\BSCS 3-2\COSC 75\JAN 4\resume-generator-api\src\main\java\com\resumegenerator\output\config\CorsConfig.java
 E:\Document\BSCS 3-2\COSC 75\JAN 4\resume-generator-api\src\main\java\com\resumegenerator\output\Controllers\ResumeController.java
-E:\Document\BSCS 3-2\COSC 75\JAN 4\resume-generator-api\src\main\java\com\resumegenerator\output\DTOs\ResumeRequest.java
+E:\Document\BSCS 3-2\COSC 75\JAN 4\resume-generator-api\src\main\java\com\resumegenerator\output\DTOs\ResumePdfDto.java
 E:\Document\BSCS 3-2\COSC 75\JAN 4\resume-generator-api\src\main\java\com\resumegenerator\output\Models\Education.java
 E:\Document\BSCS 3-2\COSC 75\JAN 4\resume-generator-api\src\main\java\com\resumegenerator\output\Models\Experience.java
 E:\Document\BSCS 3-2\COSC 75\JAN 4\resume-generator-api\src\main\java\com\resumegenerator\output\Models\PersonalInformation.java
